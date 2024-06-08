@@ -33,10 +33,8 @@ class ClanResource extends Resource
 
                 Forms\Components\FileUpload::make('logo')
                     ->image()
-                    ->avatar()
                     ->disk('public')
                     ->maxSize(1024)
-                    ->required()
                 ,
 
                 ColorPicker::make('color')

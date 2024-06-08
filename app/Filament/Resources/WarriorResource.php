@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WarriorResource\Pages;
+use App\Models\Clan;
 use App\Models\Warrior;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -30,6 +31,7 @@ class WarriorResource extends Resource
 
                 Forms\Components\Select::make('clan_id')
                     ->relationship('clan', 'name')
+                    ->default(Clan::where('is_default', true)->first()?->id)
                     ->preload()
                     ->searchable()
                     ->required(),
