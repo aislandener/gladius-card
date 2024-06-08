@@ -33,6 +33,7 @@ class ClanResource extends Resource
 
                 Forms\Components\FileUpload::make('logo')
                     ->image()
+                    ->directory('Clan')
                     ->disk('public')
                     ->maxSize(1024)
                 ,

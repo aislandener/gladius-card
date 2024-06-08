@@ -37,7 +37,7 @@ class InsigniaResource extends Resource
                 Forms\Components\FileUpload::make('path')
                     ->required()
                     ->image()
-                    ->avatar()
+                    ->directory('Insignia')
                     ->disk('public')
                     ->maxSize(1024)
                 ,

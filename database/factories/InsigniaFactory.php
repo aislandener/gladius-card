@@ -14,12 +14,9 @@ class InsigniaFactory extends Factory
     public function definition()
     {
         return [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
             'name' => $this->faker->name(),
             'path' => $this->faker->word(),
-            'requirement' => $this->faker->word(),
-
+            'requirement' => $this->faker->randomNumber(4),
             'group_id' => Group::factory(),
         ];
     }

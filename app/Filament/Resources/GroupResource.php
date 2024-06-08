@@ -52,7 +52,7 @@ class GroupResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('path'),
+                Tables\Columns\TextColumn::make('field'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

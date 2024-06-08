@@ -14,13 +14,11 @@ class WarriorFactory extends Factory
     public function definition(): array
     {
         return [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
             'name' => $this->faker->name(),
             'photo' => $this->faker->word(),
-            'xp' => $this->faker->word(),
-            'hp' => $this->faker->word(),
-            'is_leader' => $this->faker->boolean(),
+            'xp' => $this->faker->randomNumber(4),
+            'hp' => $this->faker->randomNumber(4),
+            'is_leader' => false,
 
             'clan_id' => Clan::factory(),
         ];

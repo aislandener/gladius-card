@@ -13,10 +13,8 @@ class GroupFactory extends Factory
     public function definition()
     {
         return [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
             'name' => $this->faker->name(),
-            'path' => $this->faker->word(),
+            'field' => $this->faker->randomElement([null, 'xp', 'hp']),
         ];
     }
 }
