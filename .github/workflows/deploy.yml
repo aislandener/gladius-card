@@ -21,5 +21,6 @@ jobs:
           script: |
             cd gladius.lionforge.com.br
             git pull
+            php $composer install
             php artisan migrate --force
             php artisan optimize
