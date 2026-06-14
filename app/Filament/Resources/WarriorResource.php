@@ -2,11 +2,31 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use App\Filament\Resources\WarriorResource\Pages\ListWarriors;
+use App\Filament\Resources\WarriorResource\Pages\CreateWarrior;
+use App\Filament\Resources\WarriorResource\Pages\EditWarrior;
 use App\Filament\Resources\WarriorResource\Pages;
 use App\Models\Clan;
 use App\Models\Warrior;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,43 +40,43 @@ class WarriorResource extends Resource
 
     protected static ?string $slug = 'warriors';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required(),
 
-                Forms\Components\Select::make('clan_id')
+                Select::make('clan_id')
                     ->relationship('clan', 'name')
                     ->default(Clan::where('is_default', true)->first()?->id)
                     ->preload()
                     ->searchable()
                     ->required(),
 
-                Forms\Components\TextInput::make('xp')
+                TextInput::make('xp')
                     ->integer()
                     ->required(),
 
-                Forms\Components\TextInput::make('hp')
+                TextInput::make('hp')
                     ->integer()
                     ->required(),
 
-                Forms\Components\FileUpload::make('photo')
+                FileUpload::make('photo')
                     ->maxSize(4096)
                     ->disk('public')
                     ->imageEditor()
                     ->required(),
 
-                Forms\Components\Checkbox::make('is_leader'),
+                Checkbox::make('is_leader'),
 
-                Forms\Components\Placeholder::make('created_at')
+                Placeholder::make('created_at')
                     ->label('Created Date')
                     ->content(fn(?Warrior $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Forms\Components\Placeholder::make('updated_at')
+                Placeholder::make('updated_at')
                     ->label('Last Modified Date')
                     ->content(fn(?Warrior $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
@@ -66,38 +86,38 @@ class WarriorResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\ImageColumn::make('photo'),
+                ImageColumn::make('photo'),
 
-                Tables\Columns\TextColumn::make('xp'),
+                TextColumn::make('xp'),
 
-                Tables\Columns\TextColumn::make('hp'),
+                TextColumn::make('hp'),
 
-                Tables\Columns\IconColumn::make('is_leader')
+                IconColumn::make('is_leader')
                     ->boolean()
                 ,
 
-                Tables\Columns\TextColumn::make('clan.name')
+                TextColumn::make('clan.name')
                     ->searchable()
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -105,9 +125,9 @@ class WarriorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWarriors::route('/'),
-            'create' => Pages\CreateWarrior::route('/create'),
-            'edit' => Pages\EditWarrior::route('/{record}/edit'),
+            'index' => ListWarriors::route('/'),
+            'create' => CreateWarrior::route('/create'),
+            'edit' => EditWarrior::route('/{record}/edit'),
         ];
     }
 
