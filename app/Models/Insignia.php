@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $group_id
+ * @property string $path
+ * @property int $requirement
+ * @property-read Group $group
+ */
 class Insignia extends Model
 {
     use HasFactory, SoftDeletes;

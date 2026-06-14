@@ -147,6 +147,7 @@ class WarriorResource extends Resource
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
+        /** @var Warrior $record */
         $details = [];
 
         if ($record->clan) {

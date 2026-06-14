@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $photo
+ * @property int $xp
+ * @property int $hp
+ * @property bool $is_leader
+ * @property int $clan_id
+ * @property-read string|null $logo_xp
+ * @property-read string|null $logo_hp
+ * @property-read string|null $logo_leader
+ * @property-read Clan $clan
+ */
 class Warrior extends Model
 {
     use HasFactory, SoftDeletes;

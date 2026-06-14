@@ -131,6 +131,7 @@ class InsigniaResource extends Resource
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
+        /** @var Insignia $record */
         $details = [];
 
         if ($record->group) {
