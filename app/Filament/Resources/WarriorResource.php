@@ -2,33 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Placeholder;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Filters\TrashedFilter;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\RestoreAction;
-use Filament\Actions\ForceDeleteAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use App\Filament\Resources\WarriorResource\Pages\ListWarriors;
 use App\Filament\Resources\WarriorResource\Pages\CreateWarrior;
 use App\Filament\Resources\WarriorResource\Pages\EditWarrior;
-use App\Filament\Resources\WarriorResource\Pages;
+use App\Filament\Resources\WarriorResource\Pages\ListWarriors;
 use App\Models\Clan;
 use App\Models\Warrior;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +37,7 @@ class WarriorResource extends Resource
 
     protected static ?string $slug = 'warriors';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Schema $schema): Schema
     {
@@ -74,11 +71,11 @@ class WarriorResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Warrior $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Warrior $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Warrior $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Warrior $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -97,8 +94,7 @@ class WarriorResource extends Resource
                 TextColumn::make('hp'),
 
                 IconColumn::make('is_leader')
-                    ->boolean()
-                ,
+                    ->boolean(),
 
                 TextColumn::make('clan.name')
                     ->searchable()

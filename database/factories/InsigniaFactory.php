@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Group;
 use App\Models\Insignia;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class InsigniaFactory extends Factory
 {

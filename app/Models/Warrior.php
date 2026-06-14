@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Warrior extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -24,7 +24,7 @@ class Warrior extends Model
     protected function logoXp(): Attribute
     {
         return Attribute::make(
-            get: fn($value, array $attributes) => Insignia::whereRelation('group', 'field', 'xp')
+            get: fn ($value, array $attributes) => Insignia::whereRelation('group', 'field', 'xp')
                 ->where('requirement', '<=', $this->xp)
                 ->orderBy('requirement', 'desc')
                 ->first()
@@ -35,7 +35,7 @@ class Warrior extends Model
     protected function logoHp(): Attribute
     {
         return Attribute::make(
-            get: fn($value, array $attributes) => Insignia::whereRelation('group', 'field', 'hp')
+            get: fn ($value, array $attributes) => Insignia::whereRelation('group', 'field', 'hp')
                 ->where('requirement', '<=', $this->hp)
                 ->orderBy('requirement', 'desc')
                 ->first()
@@ -46,7 +46,7 @@ class Warrior extends Model
     protected function logoLeader(): Attribute
     {
         return Attribute::make(
-            get: fn($value, array $attributes) =>  $this->is_leader ? Insignia::where('name', 'Mestre Fundador')
+            get: fn ($value, array $attributes) => $this->is_leader ? Insignia::where('name', 'Mestre Fundador')
                 ->first()
                 ?->path : null,
         );

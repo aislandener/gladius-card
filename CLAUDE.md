@@ -4,8 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Gladius Card** is a Laravel 11 application serving as a "warrior card" management system. It has two surfaces:
-- A **Filament v3 admin panel** (`/admin`) for managing all entities
+**Gladius Card** is a Laravel 13 application serving as a "warrior card" management system. It has two surfaces:
+- A **Filament v5 admin panel** (`/admin`) for managing all entities
 - A **REST API** (`/api/warriors`) consumed by external clients (e.g., a card display frontend)
 
 ## Commands
