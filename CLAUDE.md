@@ -88,7 +88,15 @@ Warrior photos and insignia images are stored on the `public` disk. Run `php art
 
 ### Deployment
 
-GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)) deploys on push to `main` via SSH: pulls, `composer install`, `php artisan migrate --force`, `php artisan optimize`. Secrets: `HOST`, `USERNAME`, `PASSWORD`, `PORT`.
+Deployment is handled by **Laravel Forge** (already configured on the server) — there is no deploy workflow in this repo.
+
+### Continuous Integration
+
+GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs on every pull request with two jobs:
+- **Tests** — `php artisan test` (PHP 8.4, builds frontend assets so the Vite manifest exists, SQLite `:memory:`).
+- **PHPStan (Larastan)** — `vendor/bin/phpstan analyse` at level 5, config in [phpstan.neon](phpstan.neon).
+
+Run locally with `composer test` and `composer analyse`.
 
 ===
 
