@@ -2,13 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Group;
-use App\Models\Insignia;
+use App\Models\Warrior;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-/** @mixin \App\Models\Warrior */
+/** @mixin Warrior */
 class WarriorResource extends JsonResource
 {
     public static $wrap = 'warrior';

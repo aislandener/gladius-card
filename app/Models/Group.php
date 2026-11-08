@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Group extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'field'
+        'field',
     ];
 
     public function insignias(): HasMany

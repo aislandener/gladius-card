@@ -2,12 +2,27 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\InsigniaResource\Pages;
+use App\Filament\Resources\InsigniaResource\Pages\CreateInsignia;
+use App\Filament\Resources\InsigniaResource\Pages\EditInsignia;
+use App\Filament\Resources\InsigniaResource\Pages\ListInsignias;
 use App\Models\Insignia;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,38 +34,37 @@ class InsigniaResource extends Resource
 
     protected static ?string $slug = 'insignias';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required(),
 
-                Forms\Components\Select::make('group_id')
+                Select::make('group_id')
                     ->relationship('group', 'name')
                     ->searchable()
                     ->preload()
                     ->required(),
 
-                Forms\Components\FileUpload::make('path')
+                FileUpload::make('path')
                     ->required()
                     ->image()
                     ->directory('Insignia')
                     ->disk('public')
-                    ->maxSize(1024)
-                ,
+                    ->maxSize(1024),
 
-                Forms\Components\TextInput::make('requirement'),
+                TextInput::make('requirement'),
 
-                Forms\Components\Placeholder::make('created_at')
+                Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Insignia $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Insignia $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                Forms\Components\Placeholder::make('updated_at')
+                Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Insignia $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Insignia $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -58,32 +72,32 @@ class InsigniaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('group.name')
+                TextColumn::make('group.name')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\ImageColumn::make('path'),
+                ImageColumn::make('path'),
 
-                Tables\Columns\TextColumn::make('requirement'),
+                TextColumn::make('requirement'),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -91,9 +105,9 @@ class InsigniaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInsignias::route('/'),
-            'create' => Pages\CreateInsignia::route('/create'),
-            'edit' => Pages\EditInsignia::route('/{record}/edit'),
+            'index' => ListInsignias::route('/'),
+            'create' => CreateInsignia::route('/create'),
+            'edit' => EditInsignia::route('/{record}/edit'),
         ];
     }
 
@@ -117,6 +131,7 @@ class InsigniaResource extends Resource
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
+        /** @var Insignia $record */
         $details = [];
 
         if ($record->group) {

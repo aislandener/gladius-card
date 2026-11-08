@@ -1,0 +1,12 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    level: 5
+
+    # PHPDoc @property/@var annotations on Eloquent models are hints, not
+    # runtime guarantees; don't flag defensive null checks as always-true.
+    treatPhpDocTypesAsCertain: false

@@ -2,13 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ClanResource\Pages;
+use App\Filament\Resources\ClanResource\Pages\CreateClan;
+use App\Filament\Resources\ClanResource\Pages\EditClan;
+use App\Filament\Resources\ClanResource\Pages\ListClans;
 use App\Models\Clan;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Form;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,40 +36,39 @@ class ClanResource extends Resource
 
     protected static ?string $slug = 'clans';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required(),
 
-                Forms\Components\Checkbox::make('is_default')
+                Checkbox::make('is_default')
                     ->inline(),
 
-                Forms\Components\FileUpload::make('logo')
+                FileUpload::make('logo')
                     ->image()
                     ->directory('Clan')
                     ->disk('public')
-                    ->maxSize(1024)
-                ,
+                    ->maxSize(1024),
 
                 ColorPicker::make('color')
                     ->required(),
 
-                Forms\Components\Group::make()
+                Group::make()
                     ->columnSpanFull()
                     ->columns()
                     ->schema([
-                        Forms\Components\Placeholder::make('created_at')
+                        Placeholder::make('created_at')
                             ->label('Created Date')
-                            ->content(fn(?Clan $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                            ->content(fn (?Clan $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                        Forms\Components\Placeholder::make('updated_at')
+                        Placeholder::make('updated_at')
                             ->label('Last Modified Date')
-                            ->content(fn(?Clan $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-                    ])
+                            ->content(fn (?Clan $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ]),
             ]);
     }
 
@@ -60,29 +76,29 @@ class ClanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\ImageColumn::make('logo'),
+                ImageColumn::make('logo'),
 
-                Tables\Columns\IconColumn::make('is_default')
+                IconColumn::make('is_default')
                     ->boolean(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -90,9 +106,9 @@ class ClanResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClans::route('/'),
-            'create' => Pages\CreateClan::route('/create'),
-            'edit' => Pages\EditClan::route('/{record}/edit'),
+            'index' => ListClans::route('/'),
+            'create' => CreateClan::route('/create'),
+            'edit' => EditClan::route('/{record}/edit'),
         ];
     }
 

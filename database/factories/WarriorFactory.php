@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Clan;
 use App\Models\Warrior;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class WarriorFactory extends Factory
 {

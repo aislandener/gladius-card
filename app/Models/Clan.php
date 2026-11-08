@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Clan extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -20,7 +20,7 @@ class Clan extends Model
     protected function casts()
     {
         return [
-            'is_default' => 'bool'
+            'is_default' => 'bool',
         ];
     }
 }

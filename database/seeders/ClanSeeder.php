@@ -3,14 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Clan;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class ClanSeeder extends Seeder
 {
-
-
     /**
      * Run the database seeds.
      */
